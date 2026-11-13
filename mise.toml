@@ -26,3 +26,10 @@ run = [
   "pkill -x \"Quick Ask\" || true",
   "D=/Applications; [ -w \"$D\" ] || { D=\"$HOME/Applications\"; mkdir -p \"$D\"; echo \"installing in $D\"; }; rm -rf \"$D/.Quick Ask.app.new\" && ditto \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask/Build/Products/Release/Quick Ask.app\" \"$D/.Quick Ask.app.new\" && rm -rf \"$D/Quick Ask.app\" && mv \"$D/.Quick Ask.app.new\" \"$D/Quick Ask.app\" && open -g \"$D/Quick Ask.app\"",
 ]
+
+[tasks.screenshot]
+description = "Render the panel with a sample chat to docs/screenshot.png, offscreen (no window, no focus change)"
+run = [
+  "mkdir -p docs",
+  "TEST_RUNNER_QUICK_ASK_SCREENSHOT=\"$PWD/docs/screenshot.png\" xcodebuild -project app/QuickAsk.xcodeproj -scheme QuickAsk -destination 'platform=macOS' -derivedDataPath \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask\" '-only-testing:QuickAskTests/readmeScreenshot()' -quiet test",
+]

@@ -2,7 +2,7 @@
 
 A macOS menu bar app that opens a floating chat panel for the `claude` CLI.
 
-<!-- Screenshot of the chat panel goes here: docs/screenshot.png -->
+<p align="center"><img src="docs/screenshot.png" alt="Quick Ask panel answering a question about which process holds a port" width="600"></p>
 
 ## What it does
 
@@ -31,6 +31,7 @@ mise run build    # Debug build
 mise run test     # unit tests
 mise run run      # build and open the app without taking focus
 mise run install  # Release build into /Applications
+mise run screenshot  # render the panel with a sample chat to docs/screenshot.png
 ```
 
 The project uses automatic signing. Set `DEVELOPMENT_TEAM` in `app/project.yml` to your own Apple team ID before building.
