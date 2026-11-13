@@ -1,0 +1,28 @@
+[tasks.gen]
+description = "Generate app/QuickAsk.xcodeproj from project.yml"
+dir = "app"
+run = "xcodegen generate"
+
+[tasks.build]
+description = "Build the Debug app"
+run = "xcodebuild -project app/QuickAsk.xcodeproj -scheme QuickAsk -destination 'platform=macOS' -derivedDataPath \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask\" build"
+
+[tasks.test]
+description = "Run the unit tests"
+run = "xcodebuild -project app/QuickAsk.xcodeproj -scheme QuickAsk -destination 'platform=macOS' -derivedDataPath \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask\" test"
+
+[tasks.run]
+description = "Build the Debug app and open it without stealing focus"
+depends = ["build"]
+run = [
+  "pkill -x \"Quick Ask\" || true",
+  "open -g \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask/Build/Products/Debug/Quick Ask.app\"",
+]
+
+[tasks.install]
+description = "Build Release, install into /Applications (~/Applications when not writable) and open it without stealing focus"
+run = [
+  "xcodebuild -project app/QuickAsk.xcodeproj -scheme QuickAsk -configuration Release -destination 'platform=macOS' -derivedDataPath \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask\" build",
+  "pkill -x \"Quick Ask\" || true",
+  "D=/Applications; [ -w \"$D\" ] || { D=\"$HOME/Applications\"; mkdir -p \"$D\"; echo \"installing in $D\"; }; rm -rf \"$D/.Quick Ask.app.new\" && ditto \"$HOME/Library/Developer/Xcode/DerivedData/quick-ask/Build/Products/Release/Quick Ask.app\" \"$D/.Quick Ask.app.new\" && rm -rf \"$D/Quick Ask.app\" && mv \"$D/.Quick Ask.app.new\" \"$D/Quick Ask.app\" && open -g \"$D/Quick Ask.app\"",
+]

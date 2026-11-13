@@ -1,0 +1,4 @@
+app/*.xcodeproj
+.claude/.scratch/
+.claude/agent-reports/
+.DS_Store

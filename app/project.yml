@@ -1,0 +1,65 @@
+# XcodeGen spec (https://github.com/yonaskolb/XcodeGen) - generates app/QuickAsk.xcodeproj
+# Regenerate after edits: mise run gen
+name: QuickAsk
+options:
+  bundleIdPrefix: io.binarygap
+  xcodeVersion: "27.0"
+  deploymentTarget:
+    macOS: "26.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.3.1"
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEVELOPMENT_TEAM: ""  # set to your Apple team ID
+    CODE_SIGN_STYLE: Automatic
+
+packages:
+  Textual:
+    url: https://github.com/gonzalezreal/textual
+    exactVersion: 0.5.0
+  KeyboardShortcuts:
+    url: https://github.com/sindresorhus/KeyboardShortcuts
+    from: 2.4.0
+
+targets:
+  QuickAsk:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources
+    dependencies:
+      - package: Textual
+        product: Textual
+      - package: KeyboardShortcuts
+        product: KeyboardShortcuts
+    settings:
+      base:
+        PRODUCT_NAME: Quick Ask
+        # The space in PRODUCT_NAME would make the module `Quick_Ask`; tests import QuickAsk.
+        PRODUCT_MODULE_NAME: QuickAsk
+        PRODUCT_BUNDLE_IDENTIFIER: io.binarygap.quick-ask
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_LSUIElement: YES
+        # Not sandboxed: the app spawns the claude CLI.
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    scheme:
+      testTargets:
+        - QuickAskTests
+
+  QuickAskTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: QuickAsk
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.binarygap.quick-ask.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Quick Ask.app/Contents/MacOS/Quick Ask"
+        GENERATE_INFOPLIST_FILE: YES
